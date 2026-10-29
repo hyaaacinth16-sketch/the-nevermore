@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE NEVERMORE | Where Classic Stories Live On</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        never: {
+                            pink: '#f8c8d0',
+                            'pink-dark': '#f2a2ba',
+                            'pink-light': '#fce3e7',
+                            olive: '#4a531e',
+                            'olive-dark': '#343b14',
+                            'olive-light': '#626e27',
+                            parchment: '#f9f8ee',
+                            'parchment-dark': '#efeccf',
+                            ink: '#2d261e',
+                            accent: '#d4af37'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Cinzel', 'serif'],
+                        serif: ['Playfair Display', 'Lora', 'serif'],
+                        body: ['Lora', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .bg-pattern {
+            background-color: #f9f8ee;
+            background-image: radial-gradient(#4a531e 0.5px, transparent 0.5px), radial-gradient(#4a531e 0.5px, #f9f8ee 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-opacity: 0.05;
+        }
+
+        /* Portal Section Display Logic (Strict Single Section View) */
+        .portal-section {
+            display: none !important;
+        }
+        .portal-section.active-section {
+            display: block !important;
+            animation: fadeIn 0.35s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f9f8ee;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a531e;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-never-parchment text-never-ink font-body antialiased selection:bg-never-pink selection:text-never-olive-dark min-h-screen flex flex-col">
+
+    <!-- MAIN HEADER & NAVIGATION BAR -->
+    <header class="bg-never-pink text-never-olive-dark pt-6 pb-6 px-4 sm:px-8 border-b-4 border-never-olive shadow-sm relative">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            
+            <!-- Brand & Title -->
+            <button onclick="navigateTo('view-home')" class="flex items-center space-x-3 text-left group">
+                <div class="w-12 h-12 rounded-xl bg-never-olive text-never-parchment flex items-center justify-center text-2xl shadow-md group-hover:bg-never-olive-dark transition-colors">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-black text-xl sm:text-2xl md:text-3xl tracking-wider text-never-olive-dark uppercase leading-none">
+                        THE NEVERMORE
+                    </h1>
+                    <p class="font-serif italic text-xs sm:text-sm text-never-olive font-medium mt-1">
+                        WHERE CLASSIC STORIES LIVE ON
+                    </p>
+                </div>
+            </button>
+
+            <!-- Navigation Menu Button (Hamburger Drawer) -->
+            <button onclick="toggleNavDrawer()" class="px-4 py-2.5 bg-never-olive text-never-parchment hover:bg-never-olive-dark rounded-xl flex items-center space-x-2 text-sm font-sans font-bold shadow-md transition-all active:scale-95" aria-label="Open Navigation Menu">
+                <i class="fa-solid fa-bars text-lg"></i>
+                <span class="hidden sm:inline uppercase tracking-wider">MENU</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- SLIDE-OUT NAVIGATION DRAWER -->
+    <div id="navDrawerOverlay" onclick="toggleNavDrawer()" class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    
+    <aside id="navDrawer" class="fixed top-0 left-0 h-full w-72 sm:w-80 bg-never-pink z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-r-4 border-never-olive">
+        <div class="bg-never-olive text-never-parchment p-5 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-compass text-never-pink"></i>
+                <h2 class="font-display font-bold text-lg tracking-wider uppercase">PORTAL MENU</h2>
+            </div>
+            <button onclick="toggleNavDrawer()" class="text-never-parchment hover:text-never-pink text-2xl transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Items -->
+        <nav class="p-4 space-y-1.5 overflow-y-auto font-display text-sm font-bold text-never-olive-dark">
+            <button onclick="navigateTo('view-home')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-home">
+                <i class="fa-solid fa-house w-5 text-center text-xs"></i>
+                <span>HOME</span>
+            </button>
+            <button onclick="navigateTo('view-contact')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-contact">
+                <i class="fa-solid fa-envelope w-5 text-center text-xs"></i>
+                <span>CONTACT</span>
+            </button>
+            <button onclick="navigateTo('view-author')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-author">
+                <i class="fa-solid fa-user-pen w-5 text-center text-xs"></i>
+                <span>AUTHOR'S PROFILE</span>
+            </button>
+            <button onclick="navigateTo('view-intro')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-intro">
+                <i class="fa-solid fa-scroll w-5 text-center text-xs"></i>
+                <span>INTRODUCTION</span>
+            </button>
+            <button onclick="navigateTo('view-poems')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-poems">
+                <i class="fa-solid fa-feather w-5 text-center text-xs"></i>
+                <span>POEMS</span>
+            </button>
+            <button onclick="navigateTo('view-short-stories')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-short-stories">
+                <i class="fa-solid fa-ghost w-5 text-center text-xs"></i>
+                <span>SHORT STORIES</span>
+            </button>
+            <button onclick="navigateTo('view-novel')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3 border-b border-never-olive/10" data-view="view-novel">
+                <i class="fa-solid fa-book-open w-5 text-center text-xs"></i>
+                <span>NOVEL</span>
+            </button>
+            <button onclick="navigateTo('view-faq')" class="nav-item-btn w-full text-left p-3 rounded-xl hover:bg-never-olive hover:text-never-parchment transition-colors flex items-center space-x-3" data-view="view-faq">
+                <i class="fa-solid fa-circle-question w-5 text-center text-xs"></i>
+                <span>FAQ</span>
+            </button>
+        </nav>
+
+        <div class="mt-auto p-5 bg-never-pink-light/60 border-t border-never-olive/20 text-center">
+            <p class="font-serif italic text-xs text-never-olive-dark">"Words live longer than empires."</p>
+        </div>
+    </aside>
+
+    <!-- PORTAL CONTAINER: ONLY ONE SECTION IS VISIBLE AT A TIME -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-8 flex flex-col justify-center">
+
+        <!-- ========================================== -->
+        <!-- 1. HOME SECTION (view-home)                -->
+        <!-- ========================================== -->
+        <section id="view-home" class="portal-section active-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-8 sm:p-12 text-center shadow-lg relative bg-pattern">
+                
+                <div class="mb-6 flex justify-center">
+                    <div class="w-20 h-20 rounded-full bg-never-pink flex items-center justify-center text-never-olive text-4xl shadow-inner border-2 border-never-olive/20">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                    </div>
+                </div>
+
+                <span class="inline-block px-4 py-1.5 rounded-full bg-never-pink/40 text-never-olive-dark text-xs font-sans font-bold uppercase tracking-widest mb-4">
+                    Classic Literature Portal
+                </span>
+                
+                <h2 class="text-4xl sm:text-6xl font-display font-bold text-never-olive-dark mb-4 leading-tight">
+                    Welcome to Books
+                </h2>
+                
+                <p class="text-lg sm:text-xl font-serif text-never-olive mb-8 max-w-xl mx-auto italic">
+                    Explore our vast library of books.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-4 pt-2">
+                    <button onclick="navigateTo('view-contact')" class="px-8 py-3.5 bg-never-olive text-never-parchment font-sans font-bold rounded-xl shadow-lg hover:bg-never-olive-dark hover:scale-105 active:scale-95 transition-all flex items-center space-x-2">
+                        <span>CONTACT US</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                    <button onclick="navigateTo('view-short-stories')" class="px-8 py-3.5 bg-never-pink text-never-olive-dark font-sans font-bold rounded-xl shadow hover:bg-never-pink-dark hover:scale-105 active:scale-95 transition-all flex items-center space-x-2">
+                        <span>EXPLORE STORIES</span>
+                        <i class="fa-solid fa-book text-xs"></i>
+                    </button>
+                    <button onclick="navigateTo('view-poems')" class="px-8 py-3.5 bg-never-parchment text-never-olive font-sans font-bold rounded-xl border-2 border-never-olive/30 shadow hover:bg-white hover:scale-105 active:scale-95 transition-all flex items-center space-x-2">
+                        <span>POETRY</span>
+                        <i class="fa-solid fa-feather text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. AUTHOR'S PROFILE SECTION (view-author)  -->
+        <!-- ========================================== -->
+        <section id="view-author" class="portal-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-6 sm:p-10 shadow-lg bg-pattern space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-sans font-bold tracking-widest text-never-olive uppercase bg-never-pink/30 px-3 py-1 rounded-full">
+                        CURATOR &amp; ANALYST
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-display font-bold text-never-olive">
+                        Author's Profile
+                    </h2>
+                    <h3 class="text-2xl font-display font-bold text-never-olive-dark">
+                        Hyacinth Grace
+                    </h3>
+                    <p class="text-xs font-sans text-never-olive/80">Tap any card below to upload or change your photo</p>
+                </div>
+
+                <!-- Custom Author Photos Upload Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    
+                    <!-- Photo 1 -->
+                    <div class="bg-white/80 rounded-2xl p-3 border-2 border-never-olive/30 shadow-md flex flex-col space-y-3">
+                        <div class="aspect-[3/4] rounded-xl overflow-hidden bg-never-pink/20 relative group border border-never-olive/20">
+                            <img id="authorImg1" src="https://placehold.co/600x800/f8c8d0/4a531e?text=Upload+Photo+1" alt="Author Photo 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <label class="cursor-pointer block w-full py-2 px-3 bg-never-olive text-never-parchment rounded-xl font-sans text-xs font-bold hover:bg-never-olive-dark transition-all active:scale-95 shadow">
+                                <i class="fa-solid fa-upload mr-1.5"></i> Upload Photo
+                                <input type="file" accept="image/*" class="hidden" onchange="previewAuthorImage(event, 'authorImg1')">
+                            </label>
+                            <button onclick="setPhotoUrl('authorImg1')" class="w-full py-1.5 px-2 bg-never-pink/40 text-never-olive-dark rounded-xl font-sans text-[11px] font-bold hover:bg-never-pink transition-colors">
+                                <i class="fa-solid fa-link mr-1"></i> Paste Image Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Photo 2 -->
+                    <div class="bg-white/80 rounded-2xl p-3 border-2 border-never-olive/30 shadow-md flex flex-col space-y-3">
+                        <div class="aspect-[3/4] rounded-xl overflow-hidden bg-never-pink/20 relative group border border-never-olive/20">
+                            <img id="authorImg2" src="https://placehold.co/600x800/f8c8d0/4a531e?text=Upload+Photo+2" alt="Author Photo 2" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <label class="cursor-pointer block w-full py-2 px-3 bg-never-olive text-never-parchment rounded-xl font-sans text-xs font-bold hover:bg-never-olive-dark transition-all active:scale-95 shadow">
+                                <i class="fa-solid fa-upload mr-1.5"></i> Upload Photo
+                                <input type="file" accept="image/*" class="hidden" onchange="previewAuthorImage(event, 'authorImg2')">
+                            </label>
+                            <button onclick="setPhotoUrl('authorImg2')" class="w-full py-1.5 px-2 bg-never-pink/40 text-never-olive-dark rounded-xl font-sans text-[11px] font-bold hover:bg-never-pink transition-colors">
+                                <i class="fa-solid fa-link mr-1"></i> Paste Image Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Photo 3 -->
+                    <div class="bg-white/80 rounded-2xl p-3 border-2 border-never-olive/30 shadow-md flex flex-col space-y-3">
+                        <div class="aspect-[3/4] rounded-xl overflow-hidden bg-never-pink/20 relative group border border-never-olive/20">
+                            <img id="authorImg3" src="https://placehold.co/600x800/f8c8d0/4a531e?text=Upload+Photo+3" alt="Author Photo 3" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-2 text-center">
+                            <label class="cursor-pointer block w-full py-2 px-3 bg-never-olive text-never-parchment rounded-xl font-sans text-xs font-bold hover:bg-never-olive-dark transition-all active:scale-95 shadow">
+                                <i class="fa-solid fa-upload mr-1.5"></i> Upload Photo
+                                <input type="file" accept="image/*" class="hidden" onchange="previewAuthorImage(event, 'authorImg3')">
+                            </label>
+                            <button onclick="setPhotoUrl('authorImg3')" class="w-full py-1.5 px-2 bg-never-pink/40 text-never-olive-dark rounded-xl font-sans text-[11px] font-bold hover:bg-never-pink transition-colors">
+                                <i class="fa-solid fa-link mr-1"></i> Paste Image Link
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Biography Text -->
+                <div class="bg-white/80 p-6 rounded-2xl border border-never-olive/20 shadow-sm space-y-4">
+                    <p class="font-serif text-base sm:text-lg leading-relaxed text-never-ink text-justify">
+                        I am a literature student, an eternal English major, and a devoted resident of worlds built from ink and paper. My days are spent dissecting the grand tapestries of classic prose, tracing the ghosts of the 19th and 20th centuries, and looking for poetry in the margins of old books. Through Nevermore, I invite you to step past the heavy velvet curtains of the literary canon and get lost in the shadows, the romance, and the enduring power of timeless storytelling.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. INTRODUCTION SECTION (view-intro)      -->
+        <!-- ========================================== -->
+        <section id="view-intro" class="portal-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-8 sm:p-12 shadow-lg bg-pattern relative">
+                <div class="max-w-3xl mx-auto text-center space-y-6">
+                    <div class="inline-flex items-center space-x-2 text-never-olive text-xs font-sans font-bold uppercase tracking-widest bg-never-pink/30 px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-scroll"></i>
+                        <span>CRITICAL FRAMEWORK</span>
+                    </div>
+
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-never-olive leading-tight">
+                        The Topography of Ambition and Illusion
+                    </h2>
+
+                    <div class="w-24 h-1 bg-never-pink mx-auto rounded-full"></div>
+
+                    <p class="text-base sm:text-lg font-serif text-never-ink leading-relaxed text-justify">
+                        This maps the intricate topography of the American literary imagination across three distinct creative cycles: the claustrophobic psychological abysses of gothic and domestic short fiction, the expansive allegorical journeys of nineteenth and twentieth-century poetry, and the tragic disillusionment embedded within the glittering facade of the Jazz Age. By tracing how these iconic texts navigate the fragile intersections of obsession, mortality, and unattainable ambition, this collection interrogates the enduring human impulse to seek meaning within life's quiet crossroads and tragic illusions.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. POEMS SECTION (view-poems)              -->
+        <!-- ========================================== -->
+        <section id="view-poems" class="portal-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-6 sm:p-10 shadow-lg bg-pattern space-y-6">
+                
+                <div class="text-center space-y-2">
+                    <span class="bg-never-pink/40 text-never-olive-dark font-sans font-bold text-xs px-3 py-1 rounded-full uppercase tracking-widest">
+                        POETRY COLLECTION
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-never-olive">
+                        Journeys Through Fate, Loss, and Choice
+                    </h2>
+                    <p class="text-never-olive font-serif italic text-sm sm:text-base">
+                        (Walt Whitman — Leaves of Grass, "O Captain! My Captain!"; Emily Dickinson — "Because I could not stop for Death"; Robert Frost — "The Road Not Taken")
+                    </p>
+                </div>
+
+                <div class="bg-white/90 rounded-2xl p-6 border-2 border-never-olive/20 shadow-sm space-y-6">
+                    
+                    <!-- A - Assemble -->
+                    <div class="bg-never-parchment/70 p-5 rounded-xl border border-never-olive/20 space-y-2">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">A</span>
+                            <span>A — Assemble (Questions &amp; Pre-Reading Analysis)</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-2 font-serif text-sm sm:text-base text-never-ink">
+                            <li>Why do people use journeys, travelers, and vehicles (like ships, carriages, and walking down paths) as metaphors for life?</li>
+                            <li>How does the way a poet handles a difficult topic (like dying, losing a leader, or making a permanent choice) change how we feel about it?</li>
+                        </ol>
+                    </div>
+
+                    <!-- S - Search -->
+                    <div class="bg-never-parchment/70 p-5 rounded-xl border border-never-olive/20 space-y-2">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-olive text-never-parchment text-xs flex items-center justify-center font-sans font-bold">S</span>
+                            <span>S — Search:</span>
+                        </div>
+                        <p class="font-serif text-sm sm:text-base leading-relaxed text-never-ink text-justify">
+                            Walt Whitman, Emily Dickinson, and Robert Frost capture the profound turning points of human existence through rich allegorical journeys. In Whitman's elegiac masterpiece "O Captain! My Captain!", the tumultuous end of the American Civil War is mourned through extended maritime metaphor, contrasting the joy of victory with the bitter tragedy of a fallen leader. Similarly, Dickinson's "Because I could not stop for Death" personifies mortality not as a terrifying monster, but as a polite gentleman escorting the speaker on a calm, inevitable carriage ride toward eternity, utilizing slant rhyme and deep symbolism. Frost's "The Road Not Taken" grounds this reflection in the everyday landscape, using the extended metaphor of divergent pathways in a yellow wood to examine the weight of human decision-making and individual choice. Across all three works, these American poets transform universal milestones—death, loss, and destiny—into timeless, intimate explorations of the human spirit.
+                        </p>
+                    </div>
+
+                    <!-- K - Kindle -->
+                    <div class="bg-never-parchment/70 p-5 rounded-xl border-2 border-never-pink space-y-4">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">K</span>
+                            <span>K — Kindle: A Poetry Soundtrack</span>
+                        </div>
+                        <p class="font-serif text-sm sm:text-base leading-relaxed text-never-ink text-justify">
+                            "The Scientist" serves as the musical soul of this poetry collection, capturing the quiet regret and lingering reflection that connect all three poems. Its central plea to "go back to the start" echoes the traveler in Robert Frost's "The Road Not Taken", who stands at a fork in the yellow wood wondering what lies down the path.
+                        </p>
+
+                        <!-- Media Player for Poems -->
+                        <div class="pt-2 border-t border-never-olive/10 space-y-2">
+                            <div class="text-xs font-sans font-bold text-never-olive">
+                                <i class="fa-solid fa-music mr-1"></i> POETRY SOUNDTRACK PLAYER
+                            </div>
+                            <div class="relative aspect-video rounded-xl overflow-hidden bg-black/90 shadow-md">
+                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/RB-RcX5DS5A" title="The Scientist - Coldplay" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. SHORT STORIES SECTION (view-short-stories) -->
+        <!-- ========================================== -->
+        <section id="view-short-stories" class="portal-section">
+            <div class="bg-never-olive text-never-parchment rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-never-olive-dark space-y-6">
+                
+                <div class="text-center space-y-2">
+                    <span class="bg-never-pink text-never-olive-dark font-sans font-bold text-xs px-3 py-1 rounded-full uppercase tracking-widest">
+                        SHORT STORY COLLECTION
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-never-parchment">
+                        Chamber of Secrets &amp; Silence
+                    </h2>
+                    <p class="text-never-pink font-serif italic text-sm sm:text-base">
+                        ("The Fall of the House of Usher", "The Tell-Tale Heart", "The Cask of Amontillado" - Edgar Allan Poe, and "The Story of an Hour" - Kate Chopin)
+                    </p>
+                </div>
+
+                <div class="bg-never-parchment text-never-ink rounded-2xl p-6 shadow-md border-2 border-never-pink space-y-6">
+                    
+                    <!-- A - Ask -->
+                    <div class="bg-white/90 p-5 rounded-xl border border-never-olive/20 space-y-2">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">A</span>
+                            <span>A — Ask:</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-2 font-serif text-sm sm:text-base">
+                            <li>Why are all these titles focused on tiny details rather than big epic journeys?</li>
+                            <li>Will these stories end with a twist or a tragedy?</li>
+                        </ol>
+                    </div>
+
+                    <!-- S - Search -->
+                    <div class="bg-white/90 p-5 rounded-xl border border-never-olive/20 space-y-3">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-olive text-never-parchment text-xs flex items-center justify-center font-sans font-bold">S</span>
+                            <span>S — Search:</span>
+                        </div>
+                        <div class="font-serif text-sm sm:text-base leading-relaxed text-justify space-y-3">
+                            <p>This collection brings together four classic tales that dig deep into what happens when the human mind is pushed to its absolute limits.</p>
+                            <p>In Edgar Allan Poe's "The Fall of the House of Usher," "The Tell-Tale Heart," and "The Cask of Amontillado," horror doesn't just come from external monsters—it comes from within. Poe traps his characters inside collapsing mansions, dark brick walls, and the deafening noise of their own guilty consciences. They are consumed by obsession, paranoia, and revenge, proving that our worst prisons are often the ones we build in our own heads.</p>
+                            <p>Kate Chopin's "The Story of an Hour" takes a quieter, yet equally powerful approach. Instead of dark catacombs, it enters a quiet home where a woman gets a sudden, fleeting taste of independence after hearing about her husband's death—only to have that newfound freedom ripped away in an instant.</p>
+                            <p>Together, these four stories offer a haunting look at isolation, secret desires, and how a single fateful moment can completely unravel a life.</p>
+                        </div>
+                    </div>
+
+                    <!-- K - Kindle -->
+                    <div class="bg-white/90 p-5 rounded-xl border-2 border-never-pink space-y-3">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/10 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">K</span>
+                            <span>K — Kindle:</span>
+                        </div>
+                        <h4 class="font-display font-bold text-base sm:text-lg text-never-olive italic">
+                            Title: Beyond the Open Window (An Alternative Ending to Kate Chopin's "The Story of an Hour")
+                        </h4>
+                        <div class="font-serif text-sm sm:text-base leading-relaxed text-justify space-y-3">
+                            <p>Instead of collapsing from "joy that kills" when she sees her husband walk through the front door, Louise Mallard's story takes a different turn.</p>
+                            <p>As Brently Mallard steps into the hallway, unhurt and unaware of the train accident, Louise doesn't faint. For a split second, her heart stutters—not from sudden joy, but from the terrifying shock of seeing her newly won freedom instantly vanish back into a cage. But as her sister Josephine gasps and the doctors rush forward to steady her, something shifts in Louise's eyes. The brief taste of open air she felt upstairs awakens a quiet, unbreakable resolve.</p>
+                            <p>Instead of letting the grief and disappointment crush her, Louise looks past her bewildered husband, straight out the open window toward the patches of blue sky. She takes a deep, steady breath, gently pushes her sister's assisting hands away, and walks right past Brently—out the front door and into the spring morning. She leaves the house not as a mourning widow or an obedient wife, but as a woman finally stepping out into her own life.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 6. NOVEL SECTION (view-novel)              -->
+        <!-- ========================================== -->
+        <section id="view-novel" class="portal-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-6 sm:p-10 shadow-lg bg-pattern space-y-6">
+                
+                <div class="text-center space-y-2">
+                    <span class="bg-never-pink/40 text-never-olive-dark font-sans font-bold text-xs px-3 py-1 rounded-full uppercase tracking-widest">
+                        JAZZ AGE NOVEL
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-never-olive">
+                        Wealth, Longing, and the Past
+                    </h2>
+                    <p class="text-never-olive font-serif italic text-sm sm:text-base">
+                        The Great Gatsby - F. Scott Fitzgerald
+                    </p>
+                </div>
+
+                <div class="bg-never-olive text-never-parchment rounded-2xl p-6 sm:p-8 shadow-xl border-2 border-never-olive-dark space-y-6">
+                    
+                    <!-- A - Assemble -->
+                    <div class="bg-never-parchment text-never-ink p-5 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/20 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">A</span>
+                            <span>A — Assemble (Questions &amp; Pre-Reading Analysis)</span>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-2 font-serif text-sm sm:text-base">
+                            <li>What makes Jay Gatsby "great"?</li>
+                            <li>Why does Nick Carraway choose to tell Gatsby's story, and how reliable is his perspective as both an insider and an outsider?</li>
+                        </ol>
+                    </div>
+
+                    <!-- S - Search -->
+                    <div class="bg-never-parchment text-never-ink p-5 rounded-xl space-y-3">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/20 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-olive text-never-parchment text-xs flex items-center justify-center font-sans font-bold">S</span>
+                            <span>S — Search:</span>
+                        </div>
+                        <div class="font-serif text-sm sm:text-base leading-relaxed text-justify space-y-3">
+                            <p>
+                                Set against the decadent backdrop of the Roaring Twenties, F. Scott Fitzgerald's The Great Gatsby operates as a scathing critique of the mythos of the American Dream, refracted through the tragic, quixotic trajectory of its eponymous protagonist. Employing Nick Carraway as a structurally complex, liminal narrator—simultaneously enmeshed in the elite milieu and morally alienated by it—Fitzgerald deploys rich Modernist symbolism to interrogate the era's spiritual bankruptcy.
+                            </p>
+                            <p>
+                                The iconic green light at the end of Daisy's dock functions as a transcendent signifier of unattainable longing, while the unblinking, ash-dusted eyes of Dr. T.J. Eckleburg survey a moral wasteland stripped of divine oversight. Gatsby's obsessive, retrograde devotion to a romanticized past exposes a broader cultural pathology wherein boundless optimism metastasizes into superficiality and commodification. Ultimately, Fitzgerald captures the tragic futility of human ambition, cementing the novel as a masterclass in American literary disillusionment.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- K - Kindle -->
+                    <div class="bg-never-parchment text-never-ink p-5 rounded-xl border-2 border-never-pink space-y-4">
+                        <div class="flex items-center space-x-2 text-never-olive font-display font-bold text-lg border-b border-never-olive/20 pb-1">
+                            <span class="w-6 h-6 rounded-full bg-never-pink text-never-olive-dark text-xs flex items-center justify-center font-sans font-bold">K</span>
+                            <span>K — Kindle: "The Night We Met" by Lord Huron</span>
+                        </div>
+                        <p class="font-serif text-sm sm:text-base leading-relaxed text-justify">
+                            This haunting song captures the very soul of Jay Gatsby's obsessive longing. Its central lament—"I had all and then most of you, some and now none of you"—mirrors Gatsby's desperate, tragic crusade to rewind time and reclaim his lost romance with Daisy Buchanan. The melancholic melody reflects the shimmering yet hollow glamour of West Egg.
+                        </p>
+
+                        <!-- Media Player for Novel -->
+                        <div class="pt-2 border-t border-never-olive/10 space-y-2">
+                            <div class="text-xs font-sans font-bold text-never-olive">
+                                <i class="fa-solid fa-guitar mr-1"></i> NOVEL SOUNDTRACK PLAYER
+                            </div>
+                            <div class="relative aspect-video rounded-xl overflow-hidden bg-black/90 shadow-md">
+                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/KtlgYxa6BMU" title="The Night We Met - Lord Huron" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 7. CONTACT SECTION (view-contact)          -->
+        <!-- ========================================== -->
+        <section id="view-contact" class="portal-section">
+            <div class="bg-never-olive text-never-parchment rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-never-olive-dark max-w-2xl mx-auto">
+                <div class="text-center space-y-4 mb-6">
+                    <h2 class="text-3xl sm:text-5xl font-display font-bold text-never-pink">
+                        Connect With Us
+                    </h2>
+                    <p class="font-serif text-sm sm:text-base text-never-parchment/90">
+                        Send us a message and we will respond as soon as possible.
+                    </p>
+                    <div class="w-16 h-0.5 bg-never-pink mx-auto"></div>
+                </div>
+
+                <form onsubmit="handleFormSubmit(event)" class="space-y-4 font-sans text-left">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-never-pink mb-1">FIRST NAME *</label>
+                            <input type="text" required placeholder="First name*" class="w-full px-4 py-3 rounded-xl bg-never-parchment text-never-ink focus:outline-none focus:ring-2 focus:ring-never-pink placeholder-never-ink/40 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-never-pink mb-1">LAST NAME *</label>
+                            <input type="text" required placeholder="Last name*" class="w-full px-4 py-3 rounded-xl bg-never-parchment text-never-ink focus:outline-none focus:ring-2 focus:ring-never-pink placeholder-never-ink/40 text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-never-pink mb-1">EMAIL ADDRESS *</label>
+                        <input type="email" required placeholder="Email address*" class="w-full px-4 py-3 rounded-xl bg-never-parchment text-never-ink focus:outline-none focus:ring-2 focus:ring-never-pink placeholder-never-ink/40 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-never-pink mb-1">PHONE NUMBER *</label>
+                        <input type="tel" required placeholder="Phone number*" class="w-full px-4 py-3 rounded-xl bg-never-parchment text-never-ink focus:outline-none focus:ring-2 focus:ring-never-pink placeholder-never-ink/40 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-never-pink mb-1">MESSAGE *</label>
+                        <textarea required rows="4" placeholder="Message*" class="w-full px-4 py-3 rounded-xl bg-never-parchment text-never-ink focus:outline-none focus:ring-2 focus:ring-never-pink placeholder-never-ink/40 text-sm resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-never-pink text-never-olive-dark font-bold rounded-xl shadow-lg hover:bg-never-pink-light transition-transform active:scale-98 uppercase tracking-wider text-sm">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 8. FAQ SECTION (view-faq)                  -->
+        <!-- ========================================== -->
+        <section id="view-faq" class="portal-section">
+            <div class="bg-never-parchment border-2 border-never-olive/30 rounded-3xl p-6 sm:p-10 shadow-lg bg-pattern space-y-6 max-w-3xl mx-auto">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-sans font-bold tracking-widest text-never-olive uppercase bg-never-pink/30 px-3 py-1 rounded-full">
+                        HELP &amp; INFO
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-display font-bold text-never-olive">
+                        Frequently Asked Questions
+                    </h2>
+                </div>
+
+                <div class="space-y-4 pt-2">
+                    <details class="group bg-white/90 rounded-xl border border-never-olive/20 p-4 [&_summary::-webkit-details-marker]:none" open>
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 font-display font-bold text-never-olive">
+                            <span>What is the A-S-K literary framework?</span>
+                            <span class="shrink-0 rounded-full bg-never-pink/30 p-1.5 text-never-olive group-open:-rotate-180 transition-transform">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </span>
+                        </summary>
+                        <p class="mt-3 leading-relaxed font-serif text-sm sm:text-base text-never-ink/90">
+                            A-S-K stands for <strong>A - Ask</strong> (Pre-reading inquiry questions), <strong>S - Search</strong> (Deep textual analysis and context), and <strong>K - Kindle</strong> (Creative responses, alternative endings, and personal synthesis).
+                        </p>
+                    </details>
+
+                    <details class="group bg-white/90 rounded-xl border border-never-olive/20 p-4 [&_summary::-webkit-details-marker]:none" open>
+                        <summary class="flex cursor-pointer items-center justify-between gap-1.5 font-display font-bold text-never-olive">
+                            <span>What is the purpose of this book portfolio?</span>
+                            <span class="shrink-0 rounded-full bg-never-pink/30 p-1.5 text-never-olive group-open:-rotate-180 transition-transform">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </span>
+                        </summary>
+                        <p class="mt-3 leading-relaxed font-serif text-sm sm:text-base text-never-ink/90">
+                            This portal serves as a curated digital gallery and analytical space dedicated to exploring landmark works of American literature. By combining academic synthesis with creative expression, it examines how classic books and stories reflect timeless human struggles with freedom, choice, and illusion.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-never-olive-dark text-never-parchment py-6 px-4 text-center border-t-4 border-never-pink font-sans text-xs mt-auto">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-left">
+                <p class="font-display font-bold text-sm text-never-pink tracking-widest uppercase">THE NEVERMORE</p>
+                <p class="font-serif italic text-never-parchment/70">"Where Classic Stories Live On"</p>
+            </div>
+            <div class="flex items-center space-x-4 font-sans text-[11px] font-semibold text-never-pink">
+                <button onclick="navigateTo('view-home')" class="hover:underline">HOME</button>
+                <span>•</span>
+                <button onclick="navigateTo('view-short-stories')" class="hover:underline">STORIES</button>
+                <span>•</span>
+                <button onclick="navigateTo('view-contact')" class="hover:underline">CONTACT</button>
+            </div>
+            <div class="text-never-parchment/50">
+                © <span id="year">2026</span> The Nevermore Literary Portal.
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST MESSAGE -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-never-olive text-never-parchment px-5 py-3 rounded-xl shadow-2xl font-sans text-xs font-bold border border-never-pink transform transition-all duration-300 z-50 flex items-center space-x-2 translate-y-20 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-never-pink text-base"></i>
+        <span id="toastMsg">Switched section view!</span>
+    </div>
+
+    <!-- JAVASCRIPT: VIEW PORTAL ROUTING LOGIC -->
+    <script>
+        // Set dynamic current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Image Upload & Preview Helper Functions
+        function previewAuthorImage(event, imgId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(imgId);
+                    if (img) {
+                        img.src = e.target.result;
+                        showToast("Author photo updated!");
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setPhotoUrl(imgId) {
+            const url = prompt("Enter image URL:");
+            if (url && url.trim() !== '') {
+                const img = document.getElementById(imgId);
+                if (img) {
+                    img.src = url.trim();
+                    showToast("Author photo URL updated!");
+                }
+            }
+        }
+
+        // SINGLE VIEW PORTAL ROUTING
+        function navigateTo(sectionId) {
+            const sections = document.querySelectorAll('.portal-section');
+            sections.forEach(sec => {
+                sec.classList.remove('active-section');
+            });
+
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active-section');
+            }
+
+            const navBtns = document.querySelectorAll('.nav-item-btn');
+            navBtns.forEach(btn => {
+                if (btn.getAttribute('data-view') === sectionId) {
+                    btn.classList.add('bg-never-olive', 'text-never-parchment');
+                } else {
+                    btn.classList.remove('bg-never-olive', 'text-never-parchment');
+                }
+            });
+
+            closeNavDrawer();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Drawer Controls
+        function toggleNavDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('navDrawerOverlay');
+            const isOpen = !drawer.classList.contains('-translate-x-full');
+
+            if (isOpen) {
+                closeNavDrawer();
+            } else {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function closeNavDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('navDrawerOverlay');
+            drawer.classList.add('-translate-x-full');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Form Submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast("Thank you for connecting! Message sent successfully.");
+            e.target.reset();
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize default view to HOME
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('view-home');
+        });
+    </script>
+</body>
+</html>
